@@ -69,7 +69,6 @@ def plotByDisease(data, index, gender):
     plt.savefig("res/year/year{}-{}.png".format(i, txt), bbox_inches='tight')
     plt.cla()
 
-
 plt.rc('font', family='Malgun Gothic')
 plt.rc('axes', unicode_minus=False)
 plt.rcParams["figure.figsize"] = (14, 4)
