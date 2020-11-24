@@ -9,6 +9,63 @@ pd.set_option('display.max_columns', 500)
 pd.set_option('display.width', 1000)
 pd.set_option('display.max_colwidth', None)
 
+plt.rc('font', family='Malgun Gothic')
+plt.rc('axes', unicode_minus=False)
+
+smokingData = pd.read_excel('./smokingRate.xlsx')
+
+smokingByAge = smokingData.iloc[3:11]
+smokingByAge = smokingByAge.drop(['성별(1)', '응답자특성별(1)'], axis=1)
+smokingByAge = smokingByAge[
+    ['응답자특성별(2)', '1998.1', '2001.1', '2005.1', '2007.1', '2008.1', '2009.1', '2010.1', '2011.1', '2012.1', '2013.1',
+     '2014.1', '2015.1', '2016.1', '2017.1', '2018.1']]
+index = smokingByAge.iloc[:, 0].values
+smokingByAge.index = index
+smokingByAge = smokingByAge.drop(['응답자특성별(2)'], axis=1)
+smokingByAge.columns = ['1998', '2001', '2005', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
+                        '2016',
+                        '2017', '2018']
+print(smokingByAge)
+
+# print(smokingByAge.iloc[0].to_numpy())
+for idx, row in smokingByAge.iterrows():
+    plt.plot(smokingByAge.columns, smokingByAge.loc[idx].to_numpy(), marker='o')
+
+plt.title("흡연률", fontsize=20)
+plt.xlabel('Year', fontsize=14)
+plt.ylabel('%', fontsize=14)
+plt.legend(smokingByAge.index)
+# plt.show()
+plt.savefig("res/smokingRate.png", bbox_inches='tight')
+plt.cla()
+
+drinkingData = pd.read_excel("./drinkingRate.xlsx")
+drinkingByAge = drinkingData.iloc[3:11]
+drinkingByAge = drinkingByAge.drop(['성별(1)', '응답자특성별(1)'], axis=1)
+drinkingByAge = drinkingByAge[
+    ['응답자특성별(2)', '2005.1', '2007.1', '2008.1', '2009.1', '2010.1', '2011.1', '2012.1', '2013.1', '2014.1', '2015.1',
+     '2016.1', '2017.1', '2018.1']]
+
+index = drinkingByAge.iloc[:, 0].values
+drinkingByAge.index = index
+
+print(drinkingByAge)
+drinkingByAge = drinkingByAge.drop(['응답자특성별(2)'], axis=1)
+drinkingByAge.columns = ['2005', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017',
+                         '2018']
+print(drinkingByAge)
+
+for idx, row in drinkingByAge.iterrows():
+    plt.plot(drinkingByAge.columns, drinkingByAge.loc[idx].to_numpy(), marker='o')
+
+plt.title("음주율", fontsize=20)
+plt.xlabel('Year', fontsize=14)
+plt.ylabel('%', fontsize=14)
+plt.legend(drinkingByAge.index)
+# plt.show()
+plt.savefig("res/drinkingRate.png", bbox_inches='tight')
+plt.cla()
+
 cancerData = pd.read_excel('./cancer.xlsx')
 
 mask = (cancerData.성별 == "남자") & (cancerData.항목 == "연령군발생률")
@@ -70,8 +127,6 @@ def plotByDisease(data, index, gender):
     plt.cla()
 
 
-plt.rc('font', family='Malgun Gothic')
-plt.rc('axes', unicode_minus=False)
 plt.rcParams["figure.figsize"] = (14, 4)
 plt.rcParams['lines.linewidth'] = 2
 plt.rcParams['axes.grid'] = True
@@ -92,57 +147,3 @@ for i in range(1, 20):
     plotByDisease(tmp, i, 1)
     plotByDisease(tmp2, i, 0)
 
-
-smokingData = pd.read_excel('./smokingRate.xlsx')
-
-smokingByAge = smokingData.iloc[3:11]
-smokingByAge = smokingByAge.drop(['성별(1)', '응답자특성별(1)'], axis=1)
-smokingByAge = smokingByAge[
-    ['응답자특성별(2)', '1998.1', '2001.1', '2005.1', '2007.1', '2008.1', '2009.1', '2010.1', '2011.1', '2012.1', '2013.1',
-     '2014.1', '2015.1', '2016.1', '2017.1', '2018.1']]
-index = smokingByAge.iloc[:, 0].values
-smokingByAge.index = index
-smokingByAge = smokingByAge.drop(['응답자특성별(2)'], axis=1)
-smokingByAge.columns = ['1998', '2001', '2005', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015',
-                        '2016',
-                        '2017', '2018']
-print(smokingByAge)
-
-# print(smokingByAge.iloc[0].to_numpy())
-for idx, row in smokingByAge.iterrows():
-    plt.plot(smokingByAge.columns, smokingByAge.loc[idx].to_numpy(), marker='o')
-
-plt.title("흡연률", fontsize=20)
-plt.xlabel('Year', fontsize=14)
-plt.ylabel('%', fontsize=14)
-plt.legend(smokingByAge.index)
-# plt.show()
-plt.savefig("res/smokingRate.png", bbox_inches='tight')
-plt.cla()
-
-drinkingData = pd.read_excel("./drinkingRate.xlsx")
-drinkingByAge = drinkingData.iloc[3:11]
-drinkingByAge = drinkingByAge.drop(['성별(1)', '응답자특성별(1)'], axis=1)
-drinkingByAge = drinkingByAge[
-    ['응답자특성별(2)', '2005.1', '2007.1', '2008.1', '2009.1', '2010.1', '2011.1', '2012.1', '2013.1', '2014.1', '2015.1',
-     '2016.1', '2017.1', '2018.1']]
-
-index = drinkingByAge.iloc[:, 0].values
-drinkingByAge.index = index
-
-print(drinkingByAge)
-drinkingByAge = drinkingByAge.drop(['응답자특성별(2)'], axis=1)
-drinkingByAge.columns = ['2005', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017',
-                         '2018']
-print(drinkingByAge)
-
-for idx, row in drinkingByAge.iterrows():
-    plt.plot(drinkingByAge.columns, drinkingByAge.loc[idx].to_numpy(), marker='o')
-
-plt.title("음주율", fontsize=20)
-plt.xlabel('Year', fontsize=14)
-plt.ylabel('%', fontsize=14)
-plt.legend(drinkingByAge.index)
-# plt.show()
-plt.savefig("res/drinkingRate.png", bbox_inches='tight')
-plt.cla()
