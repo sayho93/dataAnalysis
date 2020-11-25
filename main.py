@@ -12,6 +12,7 @@ pd.set_option('display.max_colwidth', None)
 plt.rc('font', family='Malgun Gothic')
 plt.rc('axes', unicode_minus=False)
 
+# -------흡연율
 smokingData = pd.read_excel('./smokingRate.xlsx')
 
 smokingByAge = smokingData.iloc[3:11]
@@ -27,7 +28,6 @@ smokingByAge.columns = ['1998', '2001', '2005', '2007', '2008', '2009', '2010', 
                         '2017', '2018']
 print(smokingByAge)
 
-# print(smokingByAge.iloc[0].to_numpy())
 for idx, row in smokingByAge.iterrows():
     plt.plot(smokingByAge.columns, smokingByAge.loc[idx].to_numpy(), marker='o')
 
@@ -37,8 +37,10 @@ plt.ylabel('%', fontsize=14)
 plt.legend(smokingByAge.index)
 # plt.show()
 plt.savefig("res/smokingRate.png", bbox_inches='tight')
-plt.cla()
+plt.close()
 
+
+# -------음주율
 drinkingData = pd.read_excel("./drinkingRate.xlsx")
 drinkingByAge = drinkingData.iloc[3:11]
 drinkingByAge = drinkingByAge.drop(['성별(1)', '응답자특성별(1)'], axis=1)
@@ -64,8 +66,9 @@ plt.ylabel('%', fontsize=14)
 plt.legend(drinkingByAge.index)
 # plt.show()
 plt.savefig("res/drinkingRate.png", bbox_inches='tight')
-plt.cla()
+plt.close()
 
+# -------Cancer
 cancerData = pd.read_excel('./cancer.xlsx')
 
 mask = (cancerData.성별 == "남자") & (cancerData.항목 == "연령군발생률")
@@ -99,7 +102,6 @@ def plotByYear(data, i, gender):
     tmp = tmp.transpose()
     tmp = tmp.drop(['24개 암종'])
     print(title)
-    # plt.title = title
     ax = sns.barplot(
         data=tmp,
         x=tmp.index,
@@ -107,13 +109,12 @@ def plotByYear(data, i, gender):
     )
     ax.set_title(title)
     plt.savefig("res/type/type{}-{}.png".format(i, txt), bbox_inches='tight')
-    plt.cla()
+    plt.close()
 
 
 def plotByDisease(data, index, gender):
     txt = gender == 1 and "남자" or "여자"
     title = data.index.values[index] + " - " + txt
-    # plt.title = title
     print(title)
 
     print(data.iloc[index][1:])
@@ -124,7 +125,7 @@ def plotByDisease(data, index, gender):
     )
     ax.set_title(title)
     plt.savefig("res/year/year{}-{}.png".format(i, txt), bbox_inches='tight')
-    plt.cla()
+    plt.close()
 
 
 plt.rcParams["figure.figsize"] = (14, 4)
