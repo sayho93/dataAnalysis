@@ -526,3 +526,134 @@ print('RMSE = ', mean_squared_error(prediction, Y) ** 0.5)
 res = ols('DI3_ag~HE_TG', data=stroke).fit()
 print(title)
 print(res.summary())
+
+# --------------------------------- lung cancer / smoking
+
+params = ["age", "ainc", "DC6_dg", "DC6_ag", "DC6_pr", "DC6_pt", "BS1_1", "BS2_1", "BS2_2", "BS3_1", "BS3_2",
+          "BS3_3", "BS6_2", "BS6_2_1", "BS6_2_2", "BS6_3", "BS6_4", "BS6_4_1", "BS6_4_2", "BD1", "BD2", "BD1_11",
+          "BD2_1", "BD2_14", "BD2_31", "BD2_32"]
+lungCancer = data[params]
+
+mask = (lungCancer.DC6_ag != 999) & (lungCancer.DC6_ag != 888) & (lungCancer.DC6_dg == 1) & (lungCancer.BS2_2 != 888) & (lungCancer.BS2_2 != 999)
+lungCancer = lungCancer.loc[mask, :]
+
+title = '폐암 진단시기 vs 매일흠연 시작연령'
+plt.scatter(lungCancer["BS2_2"].values, lungCancer["DC6_ag"].values, c="steelblue", edgecolor="white", s=20)
+plt.title(title)
+plt.xlabel('매일흠연 시작연령')
+plt.ylabel('폐암 진단시기')
+plt.grid()
+# plt.show()
+plt.savefig("res/폐암 진단시기 vs 매일흠연 시작연령.png", bbox_inches='tight')
+plt.close()
+
+X = lungCancer[["BS2_2"]]
+Y = lungCancer[["DC6_ag"]]
+lr = LinearRegression()
+lr.fit(X, Y)
+prediction = lr.predict(X)
+
+print("w = ", lr.coef_)
+print("b = ", lr.intercept_)
+plt.plot(X, lr.predict(X), color='red', lw=2)
+plt.scatter(X.values, Y.values, c="steelblue", edgecolor="white", s=30)
+plt.title(title)
+plt.xlabel("매일흠연 시작연령")
+plt.ylabel("폐암 진단시기")
+plt.grid()
+# plt.show()
+plt.savefig("res/폐암 진단시기 vs 매일흠연 시작연령_regression.png", bbox_inches='tight')
+plt.close()
+
+print('Mean_Squared_Error = ', mean_squared_error(prediction, Y))
+print('RMSE = ', mean_squared_error(prediction, Y) ** 0.5)
+
+res = ols('DC6_ag~BS2_2', data=lungCancer).fit()
+print(title)
+print(res.summary())
+
+params = ["age", "ainc", "DC2_dg", "DC2_ag", "DC2_pr", "DC2_pt", "BS1_1", "BS2_1", "BS2_2", "BS3_1", "BS3_2",
+          "BS3_3", "BS6_2", "BS6_2_1", "BS6_2_2", "BS6_3", "BS6_4", "BS6_4_1", "BS6_4_2", "BD1", "BD2", "BD1_11",
+          "BD2_1", "BD2_14", "BD2_31", "BD2_32"]
+liverCancer = data[params]
+mask = (liverCancer.DC2_ag != 999) & (liverCancer.DC2_ag != 888) & (liverCancer.DC2_dg == 1) & (liverCancer.BD2_31 != 8) & (liverCancer.BD2_31 != 9)
+liverCancer = liverCancer.loc[mask, :]
+
+title = '간암 진단시기 vs 폭음 빈도'
+plt.scatter(liverCancer["BD2_31"].values, liverCancer["DC2_ag"].values, c="steelblue", edgecolor="white", s=20)
+plt.title(title)
+plt.xlabel('폭음 빈도')
+plt.ylabel('간암 진단시기')
+plt.grid()
+# plt.show()
+plt.savefig("res/간암 진단시기 vs 폭음 빈도.png", bbox_inches='tight')
+plt.close()
+
+X = liverCancer[["BD2_31"]]
+Y = liverCancer[["DC2_ag"]]
+lr = LinearRegression()
+lr.fit(X, Y)
+prediction = lr.predict(X)
+
+print("w = ", lr.coef_)
+print("b = ", lr.intercept_)
+plt.plot(X, lr.predict(X), color='red', lw=2)
+plt.scatter(X.values, Y.values, c="steelblue", edgecolor="white", s=30)
+plt.title(title)
+plt.xlabel("폭음 빈도")
+plt.ylabel("간암 진단시기")
+plt.grid()
+# plt.show()
+plt.savefig("res/간암 진단시기 vs 폭음 빈도_regression.png", bbox_inches='tight')
+plt.close()
+
+print('Mean_Squared_Error = ', mean_squared_error(prediction, Y))
+print('RMSE = ', mean_squared_error(prediction, Y) ** 0.5)
+
+res = ols('DC2_ag~BD2_31', data=liverCancer).fit()
+print(title)
+print(res.summary())
+
+# --------------------------------- stroke / highBP
+
+params = ["age", "ainc", "DI3_dg", "DI3_ag", "DI3_pr", "DI3_pt", "DI1_dg", "DI1_ag", "DI1_pr", "DI1_pt", "DI1_2"]
+stroke = data[params]
+
+mask = (stroke.DI3_ag != 999) & (stroke.DI3_ag != 888) & (stroke.DI3_dg == 1) & (stroke.DI1_ag != 999) & (stroke.DI1_ag != 999)
+stroke = stroke.loc[mask, :]
+# stroke = stroke[stroke['HE_TG'].notna()]
+
+title = '뇌졸중 진단시기 vs 고혈압 진단시기'
+plt.scatter(stroke["DI1_ag"].values, stroke["DI3_ag"].values, c="steelblue", edgecolor="white", s=20)
+plt.title(title)
+plt.xlabel('고혈압 진단시기')
+plt.ylabel('뇌졸중 진단시기')
+plt.grid()
+# plt.show()
+plt.savefig("res/{}.png".format(title), bbox_inches='tight')
+plt.close()
+
+X = stroke[["DI1_ag"]]
+Y = stroke[["DI3_ag"]]
+lr = LinearRegression()
+lr.fit(X, Y)
+prediction = lr.predict(X)
+
+print("w = ", lr.coef_)
+print("b = ", lr.intercept_)
+plt.plot(X, lr.predict(X), color='red', lw=2)
+plt.scatter(X.values, Y.values, c="steelblue", edgecolor="white", s=30)
+plt.title(title)
+plt.xlabel("고혈압 진단시기")
+plt.ylabel("뇌졸중 진단시기")
+plt.grid()
+# plt.show()
+plt.savefig("res/{}_regression.png".format(title), bbox_inches='tight')
+plt.close()
+
+print('Mean_Squared_Error = ', mean_squared_error(prediction, Y))
+print('RMSE = ', mean_squared_error(prediction, Y) ** 0.5)
+
+res = ols('DI3_ag~DI1_ag', data=stroke).fit()
+print(title)
+print(res.summary())
